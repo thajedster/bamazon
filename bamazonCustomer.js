@@ -28,6 +28,23 @@ function displayItems() {
 
 function userprompt() {
     inquirer.prompt({
-
+        type: "input",
+        name: "purchase",
+        message: "please enter in the id number of the product you want to purchase.",
+        validate: function (value) {
+            if (isNaN(value) === false) {
+                return true;
+            }
+            return false;
+        }
     })
+        .then(function (answer) {
+            var query = connection.query(`SELECT * FROM products WHERE item_id = ${answer.purchase}`, function (err, data) {
+                if (err) throw err;
+                console.log(data)
+                connection.end();
+                //askQuantity();
+            })
+        })
 }
+
