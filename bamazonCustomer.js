@@ -1,4 +1,5 @@
 var mysql = require("mysql");
+var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
     host: 'localhost',
@@ -20,6 +21,13 @@ function displayItems() {
         "SELECT * FROM products", function (err, res) {
             console.log(res);
 
-            connection.end();
+            userprompt();
+            //connection.end();
         });
+};
+
+function userprompt() {
+    inquirer.prompt({
+
+    })
 }
