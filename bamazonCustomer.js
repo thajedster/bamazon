@@ -27,7 +27,7 @@ function displayItems() {
 };
 
 function userprompt() {
-    inquirer.prompt({
+    inquirer.prompt([{
         type: "input",
         name: "purchase",
         message: "please enter in the id number of the product you want to purchase.",
@@ -37,14 +37,34 @@ function userprompt() {
             }
             return false;
         }
-    })
+    },
+    {
+        type: "input",
+        name: "quantity",
+        message: "How many of each would you want to buy?",
+        validate: function (value) {
+            if (isNaN(value) === false) {
+                return true;
+            }
+            return false;
+        }
+    }])
         .then(function (answer) {
             var query = connection.query(`SELECT * FROM products WHERE item_id = ${answer.purchase}`, function (err, data) {
                 if (err) throw err;
-                console.log(data)
-                connection.end();
-                //askQuantity();
+                var select = data;
+                console.log(select)
+
+                if (select.stock_quantity < 1) {
+                    console.log('sorry, we ran out of stock')
+                } else {
+                    console.log(answer.quantity);
+                    console.log(parseInt(select.price));
+                    console.log("Your total is " + parseInt(select.price) * answer.quantity + "dollars");
+
+                }
+                //update database
+                //connection.end();
             })
         })
 }
-
